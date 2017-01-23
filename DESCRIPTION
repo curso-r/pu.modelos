@@ -1,5 +1,5 @@
-Package: PU_NAME
-Title: PACKAGE_DESCRIPTION
+Package: pu.modelos
+Title: Power Up de Modelos
 Version: 0.0.1
 Authors@R: c(
     person("Daniel", "Falbel", email = "dfalbel@gmail.com", role = "cre"),
@@ -7,7 +7,7 @@ Authors@R: c(
     person("Athos", "Damiani", email = "athos.damiani@gmail.com", role = "aut"),
     person("William", "Amorim", email = "thewilliam89@gmail.com", role = "aut"),
     person("Fernando", "Correa", email = "fptcorrea@gmail.com", role = "aut"))
-Description: PACKAGE_DESCRIPTION.
+Description: Power Up de Modelagem.
 Depends: 
   R (>= 3.2.1)
 License: MIT + file LICENSE
@@ -17,4 +17,7 @@ Remotes:
     curso-r/puBuild
 Imports:
   puBuild,
-  tutorial
+  tutorial,
+  ggplot2,
+  readr,
+  dplyr
