@@ -1,0 +1,49 @@
+---
+title: "Modelos"
+---
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, 
+  out.width = "60%", out.height = "60%",
+  fig.retina = 2
+)
+```
+
+## Aprendizado Estatístico
+
+O termos *Aprendizado Estatístico* refere-se a uma vasta quantidade de ferramentas
+que são utilizadas para entender dados. Essas ferramentas são classificadas em 
+**supervisionadas** e **não-supervisionadas**. De forma geral, aprendizado
+supervisionado envolve a construção de um modelo estatístico para prever ou estimar
+uma **resposta** de acordo com uma ou mais informações de entrada. No aprendizado 
+não-supervisionado existem variáveis de entrada mas não existe uma variável resposta. 
+Neste caso, o objetivo é entender a estrutura e a relação entre as variáveis. Existe
+uma terceira classificação para as ferramentas de aprendizado estatístico chamada 
+[Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning), mas
+não abordaremos este tema neste material.
+
+### Exemplos
+
+1. Um estudo estatístico cujo objetivo é estimar a probabilidade de uma transação 
+ser uma fraude e são fornecidos dados relativos a transações passadas bem como se 
+estas foram uma fraude ou não. É considerado um estudo de aprendizado supervisionado.
+
+2. Um estudo em que são fornecidas diversas informações sobre os hábitos de compras
+dos clientes e deseja-se identificar diferentes segmentos, é um
+estudo de aprendizado não-supervisionado.
+
+---------
+
+Neste material vamos abordar incialmente algumas técnicas de aprendizado supervisionado.
+Em seguida abordaremos abordaremos superficialmente alguns conceitos de aprendizado 
+não-supervisionado. Todos esses conceitos serão apresentados com exemplos práticos 
+usando o R.
+
+Para se aprofundar mais no assunto os seguintes links são ótimas referências.
+
+* [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf)
+* [Coursera - Practical Machine Learning](https://www.coursera.org/learn/practical-machine-learning)
+
+
+

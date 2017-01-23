@@ -1,0 +1,65 @@
+---
+title: "Aprendizado Supervisionado"
+---
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, 
+  out.width = "60%", out.height = "60%",
+  fig.retina = 2
+)
+```
+
+## Aprendizado Supervisionado
+
+Suponha que você observou uma variável resposta $Y$ e $p$ diferentes variáveis 
+explicativas $X_1, X_2, ..., X_p$. Assumimos que existe alguma relação entre $Y$
+e $X = (X_1, X_2, ..., X_p)$. Podemos denotar matematicamente esta relação como
+na seguinte equação:
+
+$$Y = f(X) + \epsilon$$
+
+O objetivo geral do aprendizado supervisionado é estimar a função $f$.
+Nessa formulação, $\epsilon$ é um termo de erro aleatório com média 0. $f$ representa
+a informação sistemática que $X$ fornece sobre $Y$.
+
+### Modelos lineares
+
+O modelo linear assume que a função $f$ é uma função linear de modo que a formulação
+do apredizado supervisionado pode ser reescrita da seguinte forma:
+
+$$Y = \alpha + X\beta + \epsilon$$
+Em que $\alpha$ e $\beta$ são coeficientes que serão estimados. Esses valores são 
+calculados de forma a minimizar uma **função de perda** na sua amostra. A função 
+mais utilizada é a perda quadrática na sua amostra. Considere $(y_1, x_1)$, $(y_2, x_2)$, ..., $(y_n, x_n)$ uma amostra de tamanho $n$.
+
+$\alpha$ e $\beta$ são escolhidos de tal forma que:
+
+$$\sum_{i = 1}^{n} [y_i - (\alpha + \beta x_i)]^2$$
+seja o menor possível. Isto é, estamos minimizando o *erro quadrático*.
+
+Na ótica da estatística, assumimos também que $Y \sim Normal(\alpha + X \beta, \sigma^2)$, 
+escolhemos $\alpha$ e $\beta$ de forma que maximize uma função que chamamos de [verossimilhança](https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_verossimilhan%C3%A7a). 
+Essa suposição é útil quando queremos fazer testes de hipóteses e intervalos de 
+confiança. Por enquanto, não estamos interessados nisso e portanto vamos 
+apresentar uma visão menos complexa.
+
+#### Exemplo
+
+Considere o banco de dados [House Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data).
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+house_prices_train <- read_csv("data/house_prices-train.csv")
+#View(house_prices_train)
+```
+
+
+
+
+
+
+
+
+
+
