@@ -20,4 +20,5 @@ Imports:
   tutorial,
   ggplot2,
   readr,
-  dplyr
+  dplyr,
+  readxl
