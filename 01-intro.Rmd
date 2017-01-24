@@ -38,7 +38,7 @@ estudo de aprendizado não-supervisionado.
 Neste material vamos abordar incialmente algumas técnicas de aprendizado supervisionado.
 Em seguida abordaremos abordaremos superficialmente alguns conceitos de aprendizado 
 não-supervisionado. Todos esses conceitos serão apresentados com exemplos práticos 
-usando o R.
+usando o R. 
 
 Para se aprofundar mais no assunto os seguintes links são ótimas referências.
 
