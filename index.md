@@ -185,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x1ea7688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x2d81688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x1ea7688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x2d81688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -292,6 +292,7 @@ que "imprime" no console uma série de informações sobre o ajuste. Também vim
 função `predict` que é utilizada pra obter os valores preditos pelo modelo para 
 uma nova base de dados.
 
+### Árvore  de Decisão
 
 
 
