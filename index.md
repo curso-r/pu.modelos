@@ -185,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x2d81688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x2d11688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x2d81688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x2d11688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -291,6 +291,9 @@ ajuste como coeficientes, dados utilizados, etc. Aprendemos também a função `
 que "imprime" no console uma série de informações sobre o ajuste. Também vimos a 
 função `predict` que é utilizada pra obter os valores preditos pelo modelo para 
 uma nova base de dados.
+
+Mais tarde falaremos novamente sobre modelos lineares quando falarmos sobre 
+[regressão logística](https://pt.wikipedia.org/wiki/Regress%C3%A3o_log%C3%ADstica).
 
 ### Árvore  de Decisão
 
