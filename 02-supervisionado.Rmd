@@ -165,6 +165,9 @@ que "imprime" no console uma série de informações sobre o ajuste. Também vim
 função `predict` que é utilizada pra obter os valores preditos pelo modelo para 
 uma nova base de dados.
 
+Mais tarde falaremos novamente sobre modelos lineares quando falarmos sobre 
+[regressão logística](https://pt.wikipedia.org/wiki/Regress%C3%A3o_log%C3%ADstica).
+
 ### Árvore  de Decisão
 
 
