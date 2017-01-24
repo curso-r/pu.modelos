@@ -109,7 +109,13 @@ ggplot(bodyfat, aes(x = WEIGHT, y = BODYFAT)) + geom_point()
 
 A partir do gráfico de dispersão, vemos que o peso do indivíduo parece ser **linearmente**
 relacionado ao percentual de gordura corporal. Vamos então ajustar um modelo linear
-usando o R. Para ajustar o modelo, usamos a função `lm` (de *__l__inear __m__odel*)
+usando o R. Para ajustar o modelo, usamos a função `lm` (de *__l__inear __m__odel*). 
+A função `lm`, assim como muitas outras que ajustam modelo no R, recebe como argumentos
+uma formula e um banco de dados. 
+
+`formula` é um tipo especial de objeto no R que ajuda muito na especificação dos modelos. 
+Ela tem a forma `y ~ x1 + x2 + ... + xn` em que `y` é o nome da variável resposta e `x1`,
+`x2`, ..., `xn` são os nomes das variáveis que serão utilizadas como explicativas. 
 
 
 ```r
@@ -179,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x26f6678> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x1ea7688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -192,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x26f6678> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x1ea7688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -271,10 +277,20 @@ sqrt(mse)
 ## [1] 4.049453
 ```
 
+Agora reduzimos bastante o erro. É muito importante ressaltar que estamos avaliando
+o erro dentro da mesma base de dados que utilizamos para ajustar o modelo. Isso é 
+considerado uma má prática, pois podemos facilmente esbarrar em uma situação de
+*superajuste* ou *overfitting*.
 
+----------------
 
-
-
+Até agora vimos que usando a função `lm` podemos ajustar um modelo linear usando o
+R. Esse único comando, que recebe um formula e um banco de dados, retorna um objeto 
+que é similar a uma `list` e que armazena uma variedade de informações sobre o 
+ajuste como coeficientes, dados utilizados, etc. Aprendemos também a função `summary`, 
+que "imprime" no console uma série de informações sobre o ajuste. Também vimos a 
+função `predict` que é utilizada pra obter os valores preditos pelo modelo para 
+uma nova base de dados.
 
 
 
