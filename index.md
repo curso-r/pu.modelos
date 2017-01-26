@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-01-24'
+date: '2017-01-26'
 ---
 
 
@@ -185,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x2d11688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x24c7688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x2d11688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x24c7688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -296,6 +296,63 @@ Mais tarde falaremos novamente sobre modelos lineares quando falarmos sobre
 [regressão logística](https://pt.wikipedia.org/wiki/Regress%C3%A3o_log%C3%ADstica).
 
 ### Árvore  de Decisão
+
+Os modelos de árvore de decisão como vamos utilizar são implementados de acordo
+com o livro *Classification and Regression Trees* de Breiman, Friedman, Olshen e Stone.
+No R, o pacote que usamos para fazer este tipo de análise é o `rpart`. Uma 
+curiosidade é que gostariam que os autores do pacote gostariam de usar o nome `cart`,
+mas esse nome foi utilizado por uma implementação particular dessas ideias. No fim,
+ficou mais famoso o `rpart`, mostrando a importância do software livre.
+
+Não vamos entrar matematicamente no detalhe de como funciona uma árvore de decisão.
+Para entender como funciona um árvore de decisão, imagine que você tem um nó com
+$N$ observações e que $n$ possuem $Resposta = 1$ e $N - n$ possuem $Resposta = 0$, 
+ou seja, temos um problema de classificação binária. Então neste caso $p = \frac{n}{N}$
+é a proporção de resposta neste nó.
+
+O objetivo da árvore de decisão dividir este nó em 2 de forma que a diferença entre
+a proporção de respostas entre os dois nós resultantes seja a maior possível. Claro que 
+cada um dos nós precisa ter uma quantidade significativa de observações de forma que $p$ 
+seja estimado corretamente.
+
+Uma introdução mais formal a esses métodos pode ser encontrada na vignette do pacote 
+`rpart`. Digite `vignette('longintro', package = 'rpart')` no console para encontrá-la.
+
+### Exemplo 
+
+Para esse exemplo vamos usar o banco de dados do Titanic. Um banco de dados que
+ficou famoso por causa de uma competição no Kaggle. Esse banco de dados contém 
+diversas informações sobre os passageiros do Titanic bem como uma variável que 
+indica se o passageiro sobreviveu (1) e se não sobreviveu (0).
+
+
+```r
+library(readr)
+titanic <- read_csv('data/titanic-train.csv')
+## Parsed with column specification:
+## cols(
+##   PassengerId = col_integer(),
+##   Survived = col_integer(),
+##   Pclass = col_integer(),
+##   Name = col_character(),
+##   Sex = col_character(),
+##   Age = col_double(),
+##   SibSp = col_integer(),
+##   Parch = col_integer(),
+##   Ticket = col_character(),
+##   Fare = col_double(),
+##   Cabin = col_character(),
+##   Embarked = col_character()
+## )
+```
+
+
+
+
+
+
+
+
 
 
 
