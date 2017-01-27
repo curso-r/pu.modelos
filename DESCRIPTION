@@ -24,7 +24,8 @@ Imports:
   readxl,
   rpart,
   rpart.plot,
-  pu.deps
+  pu.deps,
+  tidyverse
 Remotes:
   curso-r/pu.deps
   
