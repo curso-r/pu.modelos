@@ -21,4 +21,10 @@ Imports:
   ggplot2,
   readr,
   dplyr,
-  readxl
+  readxl,
+  rpart,
+  rpart.plot,
+  pu.deps
+Remotes:
+  curso-r/pu.deps
+  
