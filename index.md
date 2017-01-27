@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-01-26'
+date: '2017-01-27'
 ---
 
 
@@ -185,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x24c7688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x2ac2688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x24c7688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x2ac2688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -344,21 +344,220 @@ titanic <- read_csv('data/titanic-train.csv')
 ##   Cabin = col_character(),
 ##   Embarked = col_character()
 ## )
+titanic$Survived <- as.factor(titanic$Survived)
 ```
 
+Usando o `rpart` podemos ajustar o modelo de árvore de cdecisão fazendo.
+A função `rpart` recebe uma fórmula indicando a variável resposta e as 
+variáveis que serão utilizadas no modelo, além de receber um argumento
+`data` que indica o banco de dados utilizado.
 
 
+```r
+library(rpart)
+arvore <- rpart(Survived ~ Sex + Age + Pclass, data = titanic)
+```
+
+Assim como na regressão linear, podemos ver informações sobre o ajuste
+usando a função `summary`.
 
 
+```r
+summary(arvore)
+## Call:
+## rpart(formula = Survived ~ Sex + Age + Pclass, data = titanic)
+##   n= 891 
+## 
+##           CP nsplit rel error    xerror       xstd
+## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
+## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
+## 3 0.01461988      2 0.5321637 0.5584795 0.03581795
+## 4 0.01169591      4 0.5029240 0.5701754 0.03608751
+## 5 0.01000000      6 0.4795322 0.5438596 0.03547203
+## 
+## Variable importance
+##    Sex Pclass    Age 
+##     70     18     12 
+## 
+## Node number 1: 891 observations,    complexity param=0.4444444
+##   predicted class=0  expected loss=0.3838384  P(node) =1
+##     class counts:   549   342
+##    probabilities: 0.616 0.384 
+##   left son=2 (577 obs) right son=3 (314 obs)
+##   Primary splits:
+##       Sex    splits as  RL,       improve=124.426300, (0 missing)
+##       Pclass < 2.5  to the right, improve= 43.781830, (0 missing)
+##       Age    < 6.5  to the right, improve=  8.814172, (177 missing)
+## 
+## Node number 2: 577 observations,    complexity param=0.02339181
+##   predicted class=0  expected loss=0.1889081  P(node) =0.647587
+##     class counts:   468   109
+##    probabilities: 0.811 0.189 
+##   left son=4 (553 obs) right son=5 (24 obs)
+##   Primary splits:
+##       Age    < 6.5  to the right, improve=10.78893, (124 missing)
+##       Pclass < 1.5  to the right, improve=10.01914, (0 missing)
+## 
+## Node number 3: 314 observations,    complexity param=0.01461988
+##   predicted class=1  expected loss=0.2579618  P(node) =0.352413
+##     class counts:    81   233
+##    probabilities: 0.258 0.742 
+##   left son=6 (144 obs) right son=7 (170 obs)
+##   Primary splits:
+##       Pclass < 2.5  to the right, improve=31.163130, (0 missing)
+##       Age    < 12   to the left,  improve= 1.891684, (53 missing)
+##   Surrogate splits:
+##       Age < 18.5 to the left,  agree=0.564, adj=0.049, (0 split)
+## 
+## Node number 4: 553 observations
+##   predicted class=0  expected loss=0.1681736  P(node) =0.620651
+##     class counts:   460    93
+##    probabilities: 0.832 0.168 
+## 
+## Node number 5: 24 observations
+##   predicted class=1  expected loss=0.3333333  P(node) =0.02693603
+##     class counts:     8    16
+##    probabilities: 0.333 0.667 
+## 
+## Node number 6: 144 observations,    complexity param=0.01461988
+##   predicted class=0  expected loss=0.5  P(node) =0.1616162
+##     class counts:    72    72
+##    probabilities: 0.500 0.500 
+##   left son=12 (12 obs) right son=13 (132 obs)
+##   Primary splits:
+##       Age < 38.5 to the right, improve=3.875163, (42 missing)
+## 
+## Node number 7: 170 observations
+##   predicted class=1  expected loss=0.05294118  P(node) =0.1907969
+##     class counts:     9   161
+##    probabilities: 0.053 0.947 
+## 
+## Node number 12: 12 observations
+##   predicted class=0  expected loss=0.08333333  P(node) =0.01346801
+##     class counts:    11     1
+##    probabilities: 0.917 0.083 
+## 
+## Node number 13: 132 observations,    complexity param=0.01169591
+##   predicted class=1  expected loss=0.4621212  P(node) =0.1481481
+##     class counts:    61    71
+##    probabilities: 0.462 0.538 
+##   left son=26 (117 obs) right son=27 (15 obs)
+##   Primary splits:
+##       Age < 5.5  to the right, improve=1.777778, (42 missing)
+## 
+## Node number 26: 117 observations,    complexity param=0.01169591
+##   predicted class=1  expected loss=0.4871795  P(node) =0.1313131
+##     class counts:    57    60
+##    probabilities: 0.487 0.513 
+##   left son=52 (8 obs) right son=53 (109 obs)
+##   Primary splits:
+##       Age < 12   to the left,  improve=3.900498, (42 missing)
+## 
+## Node number 27: 15 observations
+##   predicted class=1  expected loss=0.2666667  P(node) =0.01683502
+##     class counts:     4    11
+##    probabilities: 0.267 0.733 
+## 
+## Node number 52: 8 observations
+##   predicted class=0  expected loss=0  P(node) =0.008978676
+##     class counts:     8     0
+##    probabilities: 1.000 0.000 
+## 
+## Node number 53: 109 observations
+##   predicted class=1  expected loss=0.4495413  P(node) =0.1223345
+##     class counts:    49    60
+##    probabilities: 0.450 0.550
+```
+
+Visualizar a árvore de decisão sempre dá bons *insights*. Um pacote que é interessante
+para visualizar a árvore de decisão construída com o `rpart` é o `rpart.plot`. 
 
 
+```r
+library(rpart.plot)
+rpart.plot(arvore)
+```
+
+<img src="figures//unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="70%" height="70%" />
+
+A visualização é bem intuitiva. No topo, vemos o primeiro nó em que 38% dos indivíduos
+sobreviveram e que representa o total da base (100%). Em seguida, vemos que a primeira
+variável que discrimina quem sobreviveu ou não é a variável Sexo: Dos homens, que eram 65%
+dos passageiros, apenas 19% sobreviveu enquanto das mulheres, que eram 35%, 74% sobreviveu.
+Dos homens, aqueles que eram menores de 6 anos e meio, sobreviveram em maior proporção
+também. A interpretação pode continuar dessa forma recursivamente.
+
+Mais uma vez, assim como na regressão linear, podemos utilizar a função `predict` para 
+obter a probabilidade predita de sobrevivência e a classificação predita para cada
+observação. A diferença é que agora temos o parâmetros `type`, que vai indicar se queremos
+a probabilidade ou a classe predita.
 
 
+```r
+probabilidades <- predict(arvore, newdata = titanic, type = 'prob')
+```
+
+Com `type = 'prob'` obtemos uma `matrix` em que cada coluna representa a probabilidade
+predita para cada classe. Quando temos apenas um classe isso pode parecer desnecessário
+já que o valor de uma coluna é a diferença de 1 pelo valor da outra, mas árvores podem 
+ser utilizadas em modelos com mais de classificação para mais de duas categorias.
 
 
+```r
+classes <- predict(arvore, newdata = titanic, type = 'class')
+```
+
+Quando você prevê a classe diretamente, o `rpart` indica como predito quando a
+probabilidade de sobrevivência é maior do que 50%. Isso nem sempre é o que garante
+o maior ganho com o modelo. Principalmente em problemas em que as classes são muito
+desbalanceadas. Além disso, em outros problemas, os custos de classificar uma observação
+como positiva quando ela é negativa, podem ser diferentes de classificá-la como negativa
+quando ela é positiva.
+
+Para escolher o melhor ponto de corte da probabilidade, podemos usar a curva ROC, e
+uma função de custo. Existem diversos pacotes que ajudam a calcular essas medidas. Vamos fazer aqui sem usá-los para praticar.
 
 
+```r
+library(tidyverse)
+## Error in library(tidyverse): there is no package called 'tidyverse'
+cortes <- seq(0,1,by = 0.01)
+valores <- map_df(cortes, function(x){
+  tabela <- table(
+    titanic$Survived, 
+    factor(probabilidades[,2] > x, levels = c("FALSE", "TRUE"))
+    )
+  data_frame(
+    corte = x,
+    FPR = tabela[1,2]/sum(tabela[1,]),
+    TPR = tabela[2,2]/sum(tabela[2,]),
+    TNR = tabela[1,1]/sum(tabela[1,]),
+    FNR = tabela[2,1]/sum(tabela[2,])
+  )
+})
+## Error in eval(expr, envir, enclos): could not find function "map_df"
 
+
+ggplot(valores, aes(x = FPR, y = TPR)) + 
+  geom_step() + 
+  geom_abline(color = 'blue', linetype = 'dashed')
+## Error in ggplot(valores, aes(x = FPR, y = TPR)): object 'valores' not found
+```
+
+A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
+pesos iguais para ambos os erros.
+
+
+```r
+valores %>%
+  mutate(custo = FPR + FNR) %>%
+  ggplot(aes(x = corte, y = custo)) +
+  geom_line()
+## Error in eval(expr, envir, enclos): object 'valores' not found
+```
+
+Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
+até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
 
 
 
