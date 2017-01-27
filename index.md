@@ -185,7 +185,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x2ac2688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x15a8688> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +198,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x2ac2688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x15a8688> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -371,9 +371,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5584795 0.03581795
-## 4 0.01169591      4 0.5029240 0.5701754 0.03608751
-## 5 0.01000000      6 0.4795322 0.5438596 0.03547203
+## 3 0.01461988      2 0.5321637 0.5760234 0.03621995
+## 4 0.01169591      4 0.5029240 0.5614035 0.03588593
+## 5 0.01000000      6 0.4795322 0.5263158 0.03504339
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
@@ -520,7 +520,12 @@ uma função de custo. Existem diversos pacotes que ajudam a calcular essas medi
 
 ```r
 library(tidyverse)
-## Error in library(tidyverse): there is no package called 'tidyverse'
+## Loading tidyverse: tibble
+## Loading tidyverse: tidyr
+## Loading tidyverse: purrr
+## Conflicts with tidy packages ----------------------------------------------
+## filter(): dplyr, stats
+## lag():    dplyr, stats
 cortes <- seq(0,1,by = 0.01)
 valores <- map_df(cortes, function(x){
   tabela <- table(
@@ -535,14 +540,14 @@ valores <- map_df(cortes, function(x){
     FNR = tabela[2,1]/sum(tabela[2,])
   )
 })
-## Error in eval(expr, envir, enclos): could not find function "map_df"
 
 
 ggplot(valores, aes(x = FPR, y = TPR)) + 
   geom_step() + 
   geom_abline(color = 'blue', linetype = 'dashed')
-## Error in ggplot(valores, aes(x = FPR, y = TPR)): object 'valores' not found
 ```
+
+<img src="figures//unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="50%" height="50%" />
 
 A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
 pesos iguais para ambos os erros.
@@ -553,8 +558,9 @@ valores %>%
   mutate(custo = FPR + FNR) %>%
   ggplot(aes(x = corte, y = custo)) +
   geom_line()
-## Error in eval(expr, envir, enclos): object 'valores' not found
 ```
+
+<img src="figures//unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="50%" height="50%" />
 
 Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
 até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
