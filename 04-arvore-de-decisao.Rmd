@@ -1,0 +1,140 @@
+---
+title: "Árvore de Decisão"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Árvore  de Decisão
+
+Os modelos de árvore de decisão como vamos utilizar são implementados de acordo
+com o livro *Classification and Regression Trees* de Breiman, Friedman, Olshen e Stone.
+No R, o pacote que usamos para fazer este tipo de análise é o `rpart`. Uma 
+curiosidade é que gostariam que os autores do pacote gostariam de usar o nome `cart`,
+mas esse nome foi utilizado por uma implementação particular dessas ideias. No fim,
+ficou mais famoso o `rpart`, mostrando a importância do software livre.
+
+Não vamos entrar matematicamente no detalhe de como funciona uma árvore de decisão.
+Para entender como funciona um árvore de decisão, imagine que você tem um nó com
+$N$ observações e que $n$ possuem $Resposta = 1$ e $N - n$ possuem $Resposta = 0$, 
+ou seja, temos um problema de classificação binária. Então neste caso $p = \frac{n}{N}$
+é a proporção de resposta neste nó.
+
+O objetivo da árvore de decisão dividir este nó em 2 de forma que a diferença entre
+a proporção de respostas entre os dois nós resultantes seja a maior possível. Claro que 
+cada um dos nós precisa ter uma quantidade significativa de observações de forma que $p$ 
+seja estimado corretamente.
+
+Uma introdução mais formal a esses métodos pode ser encontrada na vignette do pacote 
+`rpart`. Digite `vignette('longintro', package = 'rpart')` no console para encontrá-la.
+
+### Exemplo 
+
+Para esse exemplo vamos usar o banco de dados do Titanic. Um banco de dados que
+ficou famoso por causa de uma competição no Kaggle. Esse banco de dados contém 
+diversas informações sobre os passageiros do Titanic bem como uma variável que 
+indica se o passageiro sobreviveu (1) e se não sobreviveu (0).
+
+```{r, warning=FALSE}
+library(readr)
+titanic <- read_csv('data/titanic-train.csv')
+titanic$Survived <- as.factor(titanic$Survived)
+```
+
+Usando o `rpart` podemos ajustar o modelo de árvore de cdecisão fazendo.
+A função `rpart` recebe uma fórmula indicando a variável resposta e as 
+variáveis que serão utilizadas no modelo, além de receber um argumento
+`data` que indica o banco de dados utilizado.
+
+```{r}
+library(rpart)
+arvore <- rpart(Survived ~ Sex + Age + Pclass, data = titanic)
+```
+
+Assim como na regressão linear, podemos ver informações sobre o ajuste
+usando a função `summary`.
+
+```{r}
+summary(arvore)
+```
+
+Visualizar a árvore de decisão sempre dá bons *insights*. Um pacote que é interessante
+para visualizar a árvore de decisão construída com o `rpart` é o `rpart.plot`. 
+
+```{r, out.width = '70%', out.height = '70%'}
+library(rpart.plot)
+rpart.plot(arvore)
+```
+
+A visualização é bem intuitiva. No topo, vemos o primeiro nó em que 38% dos indivíduos
+sobreviveram e que representa o total da base (100%). Em seguida, vemos que a primeira
+variável que discrimina quem sobreviveu ou não é a variável Sexo: Dos homens, que eram 65%
+dos passageiros, apenas 19% sobreviveu enquanto das mulheres, que eram 35%, 74% sobreviveu.
+Dos homens, aqueles que eram menores de 6 anos e meio, sobreviveram em maior proporção
+também. A interpretação pode continuar dessa forma recursivamente.
+
+Mais uma vez, assim como na regressão linear, podemos utilizar a função `predict` para 
+obter a probabilidade predita de sobrevivência e a classificação predita para cada
+observação. A diferença é que agora temos o parâmetros `type`, que vai indicar se queremos
+a probabilidade ou a classe predita.
+
+```{r}
+probabilidades <- predict(arvore, newdata = titanic, type = 'prob')
+```
+
+Com `type = 'prob'` obtemos uma `matrix` em que cada coluna representa a probabilidade
+predita para cada classe. Quando temos apenas um classe isso pode parecer desnecessário
+já que o valor de uma coluna é a diferença de 1 pelo valor da outra, mas árvores podem 
+ser utilizadas em modelos com mais de classificação para mais de duas categorias.
+
+```{r}
+classes <- predict(arvore, newdata = titanic, type = 'class')
+```
+
+Quando você prevê a classe diretamente, o `rpart` indica como predito quando a
+probabilidade de sobrevivência é maior do que 50%. Isso nem sempre é o que garante
+o maior ganho com o modelo. Principalmente em problemas em que as classes são muito
+desbalanceadas. Além disso, em outros problemas, os custos de classificar uma observação
+como positiva quando ela é negativa, podem ser diferentes de classificá-la como negativa
+quando ela é positiva.
+
+Para escolher o melhor ponto de corte da probabilidade, podemos usar a curva ROC, e
+uma função de custo. Existem diversos pacotes que ajudam a calcular essas medidas. Vamos fazer aqui sem usá-los para praticar.
+
+```{r}
+library(tidyverse)
+cortes <- seq(0,1,by = 0.01)
+valores <- map_df(cortes, function(x){
+  tabela <- table(
+    titanic$Survived, 
+    factor(probabilidades[,2] > x, levels = c("FALSE", "TRUE"))
+    )
+  data_frame(
+    corte = x,
+    FPR = tabela[1,2]/sum(tabela[1,]),
+    TPR = tabela[2,2]/sum(tabela[2,]),
+    TNR = tabela[1,1]/sum(tabela[1,]),
+    FNR = tabela[2,1]/sum(tabela[2,])
+  )
+})
+
+
+ggplot(valores, aes(x = FPR, y = TPR)) + 
+  geom_step() + 
+  geom_abline(color = 'blue', linetype = 'dashed')
+```
+
+A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
+pesos iguais para ambos os erros.
+
+```{r}
+valores %>%
+  mutate(custo = FPR + FNR) %>%
+  ggplot(aes(x = corte, y = custo)) +
+  geom_line()
+```
+
+Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
+até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
