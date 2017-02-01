@@ -1,0 +1,144 @@
+---
+title: "Regressão Linear"
+---
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, 
+  out.width = "50%", out.height = "50%",
+  fig.retina = 2
+)
+```
+
+
+## Regressão Linear
+
+O modelo linear assume que a função $f$ é uma função linear de modo que a formulação
+do apredizado supervisionado pode ser reescrita da seguinte forma:
+
+$$Y = \alpha + X\beta + \epsilon$$
+Em que $\alpha$ e $\beta$ são coeficientes que serão estimados. Esses valores são 
+calculados de forma a minimizar uma **função de perda** na sua amostra. A função 
+mais utilizada é a perda quadrática na sua amostra. Considere $(y_1, x_1)$, $(y_2, x_2)$, ..., $(y_n, x_n)$ uma amostra de tamanho $n$.
+
+$\alpha$ e $\beta$ são escolhidos de tal forma que:
+
+$$\sum_{i = 1}^{n} [y_i - (\alpha + \beta x_i)]^2$$
+seja o menor possível. Isto é, estamos minimizando o *erro quadrático*.
+
+Na ótica da estatística, assumimos também que $Y \sim Normal(\alpha + X \beta, \sigma^2)$, 
+escolhemos $\alpha$ e $\beta$ de forma que maximize uma função que chamamos de [verossimilhança](https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_de_verossimilhan%C3%A7a). 
+Essa suposição é útil quando queremos fazer testes de hipóteses e intervalos de 
+confiança. Por enquanto, não estamos interessados nisso e portanto vamos 
+apresentar uma visão menos complexa.
+
+### Exemplo
+
+Considere o banco de dados *BodyFat* obtido [aqui](http://www2.stetson.edu/~jrasp/data.htm). 
+Esses são dados do percentual de gordura corporal em uma amostra de 252 homens junto com
+diversas outras medidas corporais. O percentual de gordura corporal é medido pesando
+a pessoa sob a água, um procedimento trabalhoso. O objetivo é fazer um modelo linear
+que permita obter o percentual de gordura usando medidas do corpo fáceis de serem obtidas.
+Os dados são do site do Journal of Statistics Education.
+
+```{r, message=FALSE, warning=FALSE}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+bodyfat <- read_excel('data/BodyFat.xls')
+```
+
+```{r}
+ggplot(bodyfat, aes(x = WEIGHT, y = BODYFAT)) + geom_point()
+```
+
+A partir do gráfico de dispersão, vemos que o peso do indivíduo parece ser **linearmente**
+relacionado ao percentual de gordura corporal. Vamos então ajustar um modelo linear
+usando o R. Para ajustar o modelo, usamos a função `lm` (de *__l__inear __m__odel*). 
+A função `lm`, assim como muitas outras que ajustam modelo no R, recebe como argumentos
+uma formula e um banco de dados. 
+
+`formula` é um tipo especial de objeto no R que ajuda muito na especificação dos modelos. 
+Ela tem a forma `y ~ x1 + x2 + ... + xn` em que `y` é o nome da variável resposta e `x1`,
+`x2`, ..., `xn` são os nomes das variáveis que serão utilizadas como explicativas. 
+
+```{r}
+ajuste <- lm(BODYFAT ~ WEIGHT, data = bodyfat)
+```
+
+Com essa chamada da função criamos o objeto `ajuste`. Esse objeto abriga informações
+relacionadas ao ajuste do modelo.
+
+$$bodyfat = \alpha + \beta*weight + \epsilon$$
+As estimativas de $\alpha$ e $\beta$ podem ser encontradas usando a função `summary`.
+A estimativa de $\alpha$ é o valor da coluna `Estimate` na linha `(Intercept)`: -9.99515 
+e a estimativa de $\beta$ é o valor logo abaixo: 0.16171.
+
+```{r}
+summary(ajuste)
+```
+
+Em R, o ajuste de um modelo estatístico é salvo em um objeto. Esse objeto é uma
+`list` que armazena diversas informações sobre o ajuste. Você pode ver algumas
+informações disponíveis quando vê a estrutura do objeto `ajuste` usando a função 
+`str`.
+
+```{r}
+str(ajuste, max.level = 1)
+```
+
+Por exemplo você pode acessar os coeficientes do modelo usando `ajuste$coefficients`.
+
+Outra função que existe para a maior parte dos modelos que podem ser ajustados usando o R 
+a `predict`. Usamos a função `predict` para obter as estimativas do modelo ajustado para
+uma base de dados (nova ou não).
+
+```{r}
+bodyfat$predito_modelo1 <- predict(ajuste, newdata = bodyfat)
+bodyfat %>% select(WEIGHT, BODYFAT, predito_modelo1) %>% head() %>% knitr::kable()
+```
+
+Nessa tabela, vemos o valor predito pelo modelo para cada observação bem como o
+valor verdadeiro de gordura corporal daquele indivíduo. Nosso modelo não parece
+estar muito bom. Uma possível medida de erro é o MSE (Erro quadrático médio).
+Podemos calculá-lo fazendo contas simples no R.
+
+```{r}
+mse <- mean((bodyfat$BODYFAT - bodyfat$predito_modelo1)^2)
+mse
+```
+
+É mais fácil identificar se esse erro é baixo ou não comparando-o com o erro se 
+usássemos a média da variável como valor predito para todas as observações e 
+tirando a raíz quadrada dos dois.
+
+```{r}
+erro_usando_media <- mean((bodyfat$BODYFAT - mean(bodyfat$BODYFAT))^2)
+erro_usando_media
+
+sqrt(mse)
+sqrt(erro_usando_media)
+```
+
+Agora podemos ter uma ideia de que o nosso erro está alto. Se usássemos apenas a 
+média erraríamos em média 7,7 usando o nosso modelo, ficamos com 6,1.
+
+Felizmente, podemos melhorar o modelo adicionando mais variáveis. No R basta:
+
+```{r}
+ajuste2 <- lm(BODYFAT ~ WEIGHT + HEIGHT + CHEST + ABDOMEN + NECK + KNEE, 
+              data = bodyfat)
+```
+
+O erro pode ser novamente calculado repetindo as operações que fizemos anteriormente.
+
+```{r}
+bodyfat$predito_modelo2 <- predict(ajuste2, newdata = bodyfat)
+mse <- mean((bodyfat$BODYFAT - bodyfat$predito_modelo2)^2)
+sqrt(mse)
+```
+
+Agora reduzimos bastante o erro. É muito importante ressaltar que estamos avaliando
+o erro dentro da mesma base de dados que utilizamos para ajustar o modelo. Isso é 
+considerado uma má prática, pois podemos facilmente esbarrar em uma situação de
+*superajuste* ou *overfitting*.
