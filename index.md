@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-01-27'
+date: '2017-02-01'
 ---
 
 
@@ -32,8 +32,8 @@ estudo de aprendizado não-supervisionado.
 
 ---------
 
-Neste material vamos abordar incialmente algumas técnicas de aprendizado supervisionado.
-Em seguida abordaremos abordaremos superficialmente alguns conceitos de aprendizado 
+Neste material vamos abordar inicialmente algumas técnicas de aprendizado supervisionado.
+Em seguida abordaremos superficialmente alguns conceitos de aprendizado 
 não-supervisionado. Todos esses conceitos serão apresentados com exemplos práticos 
 usando o R. 
 
@@ -62,7 +62,26 @@ O objetivo geral do aprendizado supervisionado é estimar a função $f$.
 Nessa formulação, $\epsilon$ é um termo de erro aleatório com média 0. $f$ representa
 a informação sistemática que $X$ fornece sobre $Y$.
 
-### Modelos lineares
+Existem diversas maneiras de estimar essa função. Em alguns casos assumimos uma
+forma paramétrica para ela, em outros não. Alguns exemplos de algoritmos são:
+
+* Regressão Linear
+* Regressão Logística
+* Árvore de Decisão
+* Florestas Aleatórias (*Random Forest*)
+* Gradient Boosting
+* Redes Neurais
+* Etc.
+
+Cada um dos algoritmos possui as suas vantagens e desvantagens, e problemas em 
+que trazem melhores resultados ou não. 
+
+
+
+
+
+
+## Regressão Linear
 
 O modelo linear assume que a função $f$ é uma função linear de modo que a formulação
 do apredizado supervisionado pode ser reescrita da seguinte forma:
@@ -83,7 +102,7 @@ Essa suposição é útil quando queremos fazer testes de hipóteses e intervalo
 confiança. Por enquanto, não estamos interessados nisso e portanto vamos 
 apresentar uma visão menos complexa.
 
-#### Exemplo
+### Exemplo
 
 Considere o banco de dados *BodyFat* obtido [aqui](http://www2.stetson.edu/~jrasp/data.htm). 
 Esses são dados do percentual de gordura corporal em uma amostra de 252 homens junto com
@@ -105,7 +124,7 @@ bodyfat <- read_excel('data/BodyFat.xls')
 ggplot(bodyfat, aes(x = WEIGHT, y = BODYFAT)) + geom_point()
 ```
 
-<img src="figures//unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="50%" height="50%" />
 
 A partir do gráfico de dispersão, vemos que o peso do indivíduo parece ser **linearmente**
 relacionado ao percentual de gordura corporal. Vamos então ajustar um modelo linear
@@ -185,7 +204,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x15a8688> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x39ddf40> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -198,7 +217,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x15a8688> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x39ddf40> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -282,20 +301,11 @@ o erro dentro da mesma base de dados que utilizamos para ajustar o modelo. Isso 
 considerado uma má prática, pois podemos facilmente esbarrar em uma situação de
 *superajuste* ou *overfitting*.
 
-----------------
 
-Até agora vimos que usando a função `lm` podemos ajustar um modelo linear usando o
-R. Esse único comando, que recebe um formula e um banco de dados, retorna um objeto 
-que é similar a uma `list` e que armazena uma variedade de informações sobre o 
-ajuste como coeficientes, dados utilizados, etc. Aprendemos também a função `summary`, 
-que "imprime" no console uma série de informações sobre o ajuste. Também vimos a 
-função `predict` que é utilizada pra obter os valores preditos pelo modelo para 
-uma nova base de dados.
 
-Mais tarde falaremos novamente sobre modelos lineares quando falarmos sobre 
-[regressão logística](https://pt.wikipedia.org/wiki/Regress%C3%A3o_log%C3%ADstica).
 
-### Árvore  de Decisão
+
+## Árvore  de Decisão
 
 Os modelos de árvore de decisão como vamos utilizar são implementados de acordo
 com o livro *Classification and Regression Trees* de Breiman, Friedman, Olshen e Stone.
@@ -371,9 +381,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5760234 0.03621995
-## 4 0.01169591      4 0.5029240 0.5614035 0.03588593
-## 5 0.01000000      6 0.4795322 0.5263158 0.03504339
+## 3 0.01461988      2 0.5321637 0.5935673 0.03660811
+## 4 0.01169591      4 0.5029240 0.5672515 0.03602071
+## 5 0.01000000      6 0.4795322 0.5321637 0.03518794
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
@@ -478,7 +488,7 @@ library(rpart.plot)
 rpart.plot(arvore)
 ```
 
-<img src="figures//unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="70%" height="70%" />
+<img src="figures//unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="70%" height="70%" />
 
 A visualização é bem intuitiva. No topo, vemos o primeiro nó em que 38% dos indivíduos
 sobreviveram e que representa o total da base (100%). Em seguida, vemos que a primeira
@@ -547,7 +557,7 @@ ggplot(valores, aes(x = FPR, y = TPR)) +
   geom_abline(color = 'blue', linetype = 'dashed')
 ```
 
-<img src="figures//unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="50%" height="50%" />
 
 A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
 pesos iguais para ambos os erros.
@@ -560,13 +570,10 @@ valores %>%
   geom_line()
 ```
 
-<img src="figures//unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="50%" height="50%" />
 
 Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
 até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
-
-
-
 
 
 <script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
