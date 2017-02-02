@@ -12,10 +12,35 @@ knitr::opts_chunk$set(
 
 ## Aprendizado Supervisionado
 
-Suponha que você observou uma variável resposta $Y$ e $p$ diferentes variáveis 
-explicativas $X_1, X_2, ..., X_p$. Assumimos que existe alguma relação entre $Y$
-e $X = (X_1, X_2, ..., X_p)$. Podemos denotar matematicamente esta relação como
-na seguinte equação:
+Em aprendizado supervisionado é necessário em primeiro lugar definir qual é a sua variável
+resposta ou variável dependente (Frequentemente chamada de $Y$). Deve-se tomar muito 
+cuidado ao definí-la para que o modelo responda exatamente o que você está 
+querendo saber. 
+
+A variável resposta pode ser a quantidade de compras que um cliente fará no
+próximo mês, o preço do aluguel de uma casa, uma variável binária indicando se 
+um cliente não pagará a fatura no próximo mês. Existem variáveis resposta que
+não são preditivas também, por exemplo: dada uma imagem de um número escrito a 
+mão, qual número está escrito nela.
+
+Em seguida, definimos quais serão as informações que auxiliarão a prever essa
+variável resposta. Essas variáveis são chamadas de variáveis explicativas, variáveis 
+independentes ou simplesmente $X$.
+
+Para a quantidade de compras que um cliente fará no próximo mês essas variáveis 
+podem ser quantidade de compras que o cliente fez neste mês, o gasto que ele teve neste mês,
+quantas vezes ele frequentou a minha loja no último ano, etc.
+
+Um vetor da forma $(Y, X_1, X_2, ..., X_p)$ representa uma observação. Para usar
+qualquer algoritmo de aprendizado de máquina, você precisará de um número suficiente
+de observações. O número de observações vai depender da complexidade do algoritmo 
+que você quiser utilizar, da disponibilidade de observações entre outros motivos.
+
+De uma forma um pouco mais formal, podemos explciar o Aprendizado Supervisionado
+da seguinte forma. Suponha que você observou uma variável resposta $Y$ e $p$ 
+diferentes variáveis explicativas $X_1, X_2, ..., X_p$. Assumimos que existe alguma 
+relação entre $Y$ e $X = (X_1, X_2, ..., X_p)$. Podemos denotar matematicamente 
+esta relação como na seguinte equação:
 
 $$Y = f(X) + \epsilon$$
 
