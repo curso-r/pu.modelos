@@ -40,10 +40,11 @@ Em seguida abordaremos superficialmente alguns conceitos de aprendizado
 não-supervisionado. Todos esses conceitos serão apresentados com exemplos práticos 
 usando o R. 
 
+Uma introdução bem interessante ao tema pode ser encontrada [aqui](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
+
 Para se aprofundar mais no assunto os seguintes links são ótimas referências.
 
 * [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf)
 * [Coursera - Practical Machine Learning](https://www.coursera.org/learn/practical-machine-learning)
-
 
 
