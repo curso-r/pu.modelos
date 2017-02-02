@@ -63,7 +63,7 @@ titanic <- read_csv('data/titanic-train.csv')
 titanic$Survived <- as.factor(titanic$Survived)
 ```
 
-Usando o `rpart` podemos ajustar o modelo de árvore de cdecisão fazendo.
+Usaremos o pacote `rpart` que por sua vez possui uma função chamada `rpart`.
 A função `rpart` recebe uma fórmula indicando a variável resposta e as 
 variáveis que serão utilizadas no modelo, além de receber um argumento
 `data` que indica o banco de dados utilizado.
@@ -81,7 +81,7 @@ summary(arvore)
 ```
 
 Visualizar a árvore de decisão sempre dá bons *insights*. Um pacote que é interessante
-para visualizar a árvore de decisão construída com o `rpart` é o `rpart.plot`. 
+para visualizar a árvore de decisão construída com o `rpart` é o [`rpart.plot`](https://CRAN.R-project.org/package=rpart.plot). 
 
 ```{r, out.width = '70%', out.height = '70%'}
 library(rpart.plot)
