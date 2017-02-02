@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 
 ## Regressão Linear
 
+
+Na introdução ao aprendizado supervisionado, vimos que o objetivo é sempre estimar 
+uma função $f$ tal que $y = f(x) + \epsilon$.
+
 O modelo linear assume que a função $f$ é uma função linear de modo que a formulação
 do apredizado supervisionado pode ser reescrita da seguinte forma:
 
@@ -142,3 +146,14 @@ Agora reduzimos bastante o erro. É muito importante ressaltar que estamos avali
 o erro dentro da mesma base de dados que utilizamos para ajustar o modelo. Isso é 
 considerado uma má prática, pois podemos facilmente esbarrar em uma situação de
 *superajuste* ou *overfitting*.
+
+### Recapitulando
+
+Ajustar um modelo de regressão linear no R é muito simples.
+
+* Usamos a função `lm` que recebe uma fórmula de especificação do modelo e um data.frame.
+* A função `lm` retorna um obejto do tipo `lm`, que é uma `list` que armazena diversas informações sobre o ajuste.
+* A função `summary` e a função `str` ajudam a identificar o conteúdo do objeto do modelo.
+* A função `predict` é usada para aplicar o modelo em um novo banco de dados.
+
+Essas funções são bem parecidas para qualquer modelo que você ajustar no R futuramente.
