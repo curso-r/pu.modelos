@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-02-01'
+date: '2017-02-02'
 ---
 
 
@@ -51,10 +51,35 @@ Para se aprofundar mais no assunto os seguintes links são ótimas referências.
 
 ## Aprendizado Supervisionado
 
-Suponha que você observou uma variável resposta $Y$ e $p$ diferentes variáveis 
-explicativas $X_1, X_2, ..., X_p$. Assumimos que existe alguma relação entre $Y$
-e $X = (X_1, X_2, ..., X_p)$. Podemos denotar matematicamente esta relação como
-na seguinte equação:
+Em aprendizado supervisionado é necessário em primeiro lugar definir qual é a sua variável
+resposta ou variável dependente (Frequentemente chamada de $Y$). Deve-se tomar muito 
+cuidado ao definí-la para que o modelo responda exatamente o que você está 
+querendo saber. 
+
+A variável resposta pode ser a quantidade de compras que um cliente fará no
+próximo mês, o preço do aluguel de uma casa, uma variável binária indicando se 
+um cliente não pagará a fatura no próximo mês. Existem variáveis resposta que
+não são preditivas também, por exemplo: dada uma imagem de um número escrito a 
+mão, qual número está escrito nela.
+
+Em seguida, definimos quais serão as informações que auxiliarão a prever essa
+variável resposta. Essas variáveis são chamadas de variáveis explicativas, variáveis 
+independentes ou simplesmente $X$.
+
+Para a quantidade de compras que um cliente fará no próximo mês essas variáveis 
+podem ser quantidade de compras que o cliente fez neste mês, o gasto que ele teve neste mês,
+quantas vezes ele frequentou a minha loja no último ano, etc.
+
+Um vetor da forma $(Y, X_1, X_2, ..., X_p)$ representa uma observação. Para usar
+qualquer algoritmo de aprendizado de máquina, você precisará de um número suficiente
+de observações. O número de observações vai depender da complexidade do algoritmo 
+que você quiser utilizar, da disponibilidade de observações entre outros motivos.
+
+De uma forma um pouco mais formal, podemos explciar o Aprendizado Supervisionado
+da seguinte forma. Suponha que você observou uma variável resposta $Y$ e $p$ 
+diferentes variáveis explicativas $X_1, X_2, ..., X_p$. Assumimos que existe alguma 
+relação entre $Y$ e $X = (X_1, X_2, ..., X_p)$. Podemos denotar matematicamente 
+esta relação como na seguinte equação:
 
 $$Y = f(X) + \epsilon$$
 
@@ -204,7 +229,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x39ddf40> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x2c0af40> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -217,7 +242,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x39ddf40> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x2c0af40> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -381,9 +406,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5935673 0.03660811
-## 4 0.01169591      4 0.5029240 0.5672515 0.03602071
-## 5 0.01000000      6 0.4795322 0.5321637 0.03518794
+## 3 0.01461988      2 0.5321637 0.5526316 0.03568079
+## 4 0.01169591      4 0.5029240 0.5409357 0.03540163
+## 5 0.01000000      6 0.4795322 0.5497076 0.03561161
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
