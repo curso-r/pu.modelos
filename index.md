@@ -37,11 +37,12 @@ Em seguida abordaremos superficialmente alguns conceitos de aprendizado
 não-supervisionado. Todos esses conceitos serão apresentados com exemplos práticos 
 usando o R. 
 
+Uma introdução bem interessante ao tema pode ser encontrada [aqui](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
+
 Para se aprofundar mais no assunto os seguintes links são ótimas referências.
 
 * [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf)
 * [Coursera - Practical Machine Learning](https://www.coursera.org/learn/practical-machine-learning)
-
 
 
 
@@ -107,6 +108,10 @@ que trazem melhores resultados ou não.
 
 
 ## Regressão Linear
+
+
+Na introdução ao aprendizado supervisionado, vimos que o objetivo é sempre estimar 
+uma função $f$ tal que $y = f(x) + \epsilon$.
 
 O modelo linear assume que a função $f$ é uma função linear de modo que a formulação
 do apredizado supervisionado pode ser reescrita da seguinte forma:
@@ -229,7 +234,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x2c0af40> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x2577f40> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -242,7 +247,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x2c0af40> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x2577f40> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -326,6 +331,17 @@ o erro dentro da mesma base de dados que utilizamos para ajustar o modelo. Isso 
 considerado uma má prática, pois podemos facilmente esbarrar em uma situação de
 *superajuste* ou *overfitting*.
 
+### Recapitulando
+
+Ajustar um modelo de regressão linear no R é muito simples.
+
+* Usamos a função `lm` que recebe uma fórmula de especificação do modelo e um data.frame.
+* A função `lm` retorna um obejto do tipo `lm`, que é uma `list` que armazena diversas informações sobre o ajuste.
+* A função `summary` e a função `str` ajudam a identificar o conteúdo do objeto do modelo.
+* A função `predict` é usada para aplicar o modelo em um novo banco de dados.
+
+Essas funções são bem parecidas para qualquer modelo que você ajustar no R futuramente.
+
 
 
 
@@ -406,9 +422,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5526316 0.03568079
-## 4 0.01169591      4 0.5029240 0.5409357 0.03540163
-## 5 0.01000000      6 0.4795322 0.5497076 0.03561161
+## 3 0.01461988      2 0.5321637 0.5760234 0.03621995
+## 4 0.01169591      4 0.5029240 0.5526316 0.03568079
+## 5 0.01000000      6 0.4795322 0.5058480 0.03452394
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
