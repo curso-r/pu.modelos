@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-02-02'
+date: '2017-02-03'
 ---
 
 
@@ -234,7 +234,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x2577f40> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x33bbf40> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -247,7 +247,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x2577f40> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x33bbf40> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -350,24 +350,36 @@ Essas funções são bem parecidas para qualquer modelo que você ajustar no R f
 
 Os modelos de árvore de decisão como vamos utilizar são implementados de acordo
 com o livro *Classification and Regression Trees* de Breiman, Friedman, Olshen e Stone.
-No R, o pacote que usamos para fazer este tipo de análise é o `rpart`. Uma 
-curiosidade é que gostariam que os autores do pacote gostariam de usar o nome `cart`,
-mas esse nome foi utilizado por uma implementação particular dessas ideias. No fim,
-ficou mais famoso o `rpart`, mostrando a importância do software livre.
 
-Não vamos entrar matematicamente no detalhe de como funciona uma árvore de decisão.
-Para entender como funciona um árvore de decisão, imagine que você tem um nó com
-$N$ observações e que $n$ possuem $Resposta = 1$ e $N - n$ possuem $Resposta = 0$, 
+De certa forma, a árvore de decisão é o modelo mais intuitivo que existe, principalmente
+quando o objetivo é classificar uma observação em uma de duas classes. Considere 
+que o seu objetivo é separar as observações azuis das observações laranjas no 
+gráfico abaixo.
+
+<img src="figures//unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="50%" height="50%" />
+
+Pelo gráfico acima, podemos ver que a variável $x$ fornece informação que ajuda
+a discriminar se a observação será azul ou laranja. Basta ver que as observações
+de cor laranja estão mais concentradas do lado direito e as azuis, mais para o
+lado esquerdo. O objetivo da árvore de decisão é encontrar o valor de $x$ que 
+melhor separa as informações azuis e laranja.
+
+Para detalhar um pouco mais, imagine que você tem um nó com $N$ observações e que 
+$n$ possuem $Resposta = 1$ (Exemplo Cor = 'Azul') e $N - n$ possuem $Resposta = 0$, 
 ou seja, temos um problema de classificação binária. Então neste caso $p = \frac{n}{N}$
 é a proporção de resposta neste nó.
 
-O objetivo da árvore de decisão dividir este nó em 2 de forma que a diferença entre
-a proporção de respostas entre os dois nós resultantes seja a maior possível. Claro que 
-cada um dos nós precisa ter uma quantidade significativa de observações de forma que $p$ 
-seja estimado corretamente.
+O objetivo da árvore de decisão dividir este *nó* (grupo de observações) em 2 de 
+forma que a diferença entre a proporção de classes entre os dois nós resultantes 
+seja a maior possível. Claro que cada um dos nós precisa ter uma quantidade 
+significativa de observações de forma que $p$ seja estimado corretamente.
 
-Uma introdução mais formal a esses métodos pode ser encontrada na vignette do pacote 
-`rpart`. Digite `vignette('longintro', package = 'rpart')` no console para encontrá-la.
+No R, o pacote que usamos para fazer este tipo de análise é o [`rpart`](https://CRAN.R-project.org/package=rpart). Uma introdução 
+mais formal a esses métodos pode ser encontrada na vignette do pacote `rpart`. 
+Digite `vignette('longintro', package = 'rpart')` no console para encontrá-la.
+
+Existem ainda outras alternativas de pacotes como o [`tree`](https://CRAN.R-project.org/package=tree),
+e [`party`](https://CRAN.R-project.org/package=party).
 
 ### Exemplo 
 
@@ -398,7 +410,7 @@ titanic <- read_csv('data/titanic-train.csv')
 titanic$Survived <- as.factor(titanic$Survived)
 ```
 
-Usando o `rpart` podemos ajustar o modelo de árvore de cdecisão fazendo.
+Usaremos o pacote `rpart` que por sua vez possui uma função chamada `rpart`.
 A função `rpart` recebe uma fórmula indicando a variável resposta e as 
 variáveis que serão utilizadas no modelo, além de receber um argumento
 `data` que indica o banco de dados utilizado.
@@ -422,9 +434,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5760234 0.03621995
-## 4 0.01169591      4 0.5029240 0.5526316 0.03568079
-## 5 0.01000000      6 0.4795322 0.5058480 0.03452394
+## 3 0.01461988      2 0.5321637 0.5964912 0.03667148
+## 4 0.01169591      4 0.5029240 0.5847953 0.03641573
+## 5 0.01000000      6 0.4795322 0.5555556 0.03574957
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
@@ -521,7 +533,7 @@ summary(arvore)
 ```
 
 Visualizar a árvore de decisão sempre dá bons *insights*. Um pacote que é interessante
-para visualizar a árvore de decisão construída com o `rpart` é o `rpart.plot`. 
+para visualizar a árvore de decisão construída com o `rpart` é o [`rpart.plot`](https://CRAN.R-project.org/package=rpart.plot). 
 
 
 ```r
@@ -529,7 +541,7 @@ library(rpart.plot)
 rpart.plot(arvore)
 ```
 
-<img src="figures//unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="70%" height="70%" />
+<img src="figures//unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="70%" height="70%" />
 
 A visualização é bem intuitiva. No topo, vemos o primeiro nó em que 38% dos indivíduos
 sobreviveram e que representa o total da base (100%). Em seguida, vemos que a primeira
@@ -598,7 +610,7 @@ ggplot(valores, aes(x = FPR, y = TPR)) +
   geom_abline(color = 'blue', linetype = 'dashed')
 ```
 
-<img src="figures//unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="50%" height="50%" />
 
 A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
 pesos iguais para ambos os erros.
@@ -611,7 +623,7 @@ valores %>%
   geom_line()
 ```
 
-<img src="figures//unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="50%" height="50%" />
 
 Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
 até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
