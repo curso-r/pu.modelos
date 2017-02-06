@@ -234,7 +234,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x19fc660> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x1928660> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -247,7 +247,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x19fc660> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x1928660> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -434,9 +434,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5994152 0.03673449
-## 4 0.01169591      4 0.5029240 0.5935673 0.03660811
-## 5 0.01000000      6 0.4795322 0.5584795 0.03581795
+## 3 0.01461988      2 0.5321637 0.5614035 0.03588593
+## 4 0.01169591      4 0.5029240 0.5643275 0.03595352
+## 5 0.01000000      6 0.4795322 0.5438596 0.03547203
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
@@ -627,6 +627,187 @@ valores %>%
 
 Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
 até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
+
+
+
+## Overfitting
+
+*Overfitting* ou *superajuste* acontece quando a função $f$ estimada por algum 
+modelo da forma $y = f(x) + \epsilon$ é muito específica sendo assim, quando avaliamos
+o modelo em um outro conjunto de observações percebemos que o erro aumenta muito.
+
+Isso acontece quando o modelo aprende muitos detalhes e ruidos da base de treino e 
+ao aplicar o modelo em novos dados, como esses detalhes/ruídos não se repetem, a
+performance do modelo é impactada de forma negativa.
+
+Para visualizar o que é overfitting, considere o seguinte banco de dados.
+
+
+```r
+library(ggplot2)
+library(dplyr)
+set.seed(7)
+dados <- data_frame(
+  x = runif(10),
+  y = 2*x + rnorm(10, 0, 0.1)
+)
+ggplot(dados, aes(x = x, y = y)) + geom_point()
+```
+
+<img src="figures//unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="50%" height="50%" />
+
+Esse banco de dados foi gerado usando exatamente as suposições de um modelo de regressão.
+Temos uma variável $x$ e uma variável $y$ que é calculada com $2*x + \epsilon$ em que
+$\epsilon$ é uma variável aleatória com distribuição Normal de média zero e desvio padrão $0.1$.
+
+Portanto, o melhor modelo para explicar esses dados, seria um modelo linear bem simples,
+que poderia ser ajsutado no R usando:
+
+
+```r
+modelo <- lm(y ~ x, data = dados)
+summary(modelo)
+## 
+## Call:
+## lm(formula = y ~ x, data = dados)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.18459 -0.08062 -0.03914  0.11382  0.17434 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  0.10125    0.07015   1.443    0.187    
+## x            1.98848    0.12519  15.884 2.47e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1298 on 8 degrees of freedom
+## Multiple R-squared:  0.9693,	Adjusted R-squared:  0.9654 
+## F-statistic: 252.3 on 1 and 8 DF,  p-value: 2.471e-07
+```
+
+Note que mesmo com 10 observações o modelo acertou precisamente os parâmetros que 
+utilizamos para simular os dados. Mas existe uma aleatoriedade inerente ao método
+que utilizamos para construir o banco de dados.
+
+Imagine se, ao invés de ajustar esse modelo, tivessemos ajustado o modelo:
+
+$$y = \alpha + \beta_1x + \beta_2x^2 + ... + \beta_9x^9 + \epsilon$$
+No R:
+
+
+```r
+modelo2 <- lm(y ~ poly(x, 9), data = dados)
+summary(modelo2)
+## 
+## Call:
+## lm(formula = y ~ poly(x, 9), data = dados)
+## 
+## Residuals:
+## ALL 10 residuals are 0: no residual degrees of freedom!
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept)  1.00501         NA      NA       NA
+## poly(x, 9)1  2.06100         NA      NA       NA
+## poly(x, 9)2 -0.18881         NA      NA       NA
+## poly(x, 9)3  0.10846         NA      NA       NA
+## poly(x, 9)4 -0.02527         NA      NA       NA
+## poly(x, 9)5 -0.20073         NA      NA       NA
+## poly(x, 9)6 -0.11473         NA      NA       NA
+## poly(x, 9)7 -0.12387         NA      NA       NA
+## poly(x, 9)8 -0.11701         NA      NA       NA
+## poly(x, 9)9 -0.06445         NA      NA       NA
+## 
+## Residual standard error: NaN on 0 degrees of freedom
+## Multiple R-squared:      1,	Adjusted R-squared:    NaN 
+## F-statistic:   NaN on 9 and 0 DF,  p-value: NA
+```
+
+Veja agora o gráfico dos modelos ajsutados:
+
+
+```r
+ggplot(dados, aes(x = x, y = y)) + geom_point() + 
+  geom_smooth(formula = y ~ x, colour = "red", se = FALSE, method = 'lm') +
+  geom_smooth(formula = y ~ poly(x, 9), se = FALSE, method = 'lm')
+```
+
+<img src="figures//unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="50%" height="50%" />
+
+O linha em vermelho, é a reta ajustada pelo primeiro modelo, ou seja, o modelo que 
+utilizamos para gerar os dados. A linha azul, é a curva ajustada pelo polinômio do
+nono grau. O modelo azul acerta todos os pontos enquanto o vermelho (que é o modelo
+correto não). Se calcularmos o erro médio quadrático de cada um dos modelos, chegaríamos
+a conclusão de que o modelo azul é melhor.
+
+
+```r
+erro_modelo1 <- mean((dados$y - predict(modelo, newdata = dados))^2)
+erro_modelo2 <- mean((dados$y - predict(modelo2, newdata = dados))^2)
+erro_modelo1 %>% round(3)
+## [1] 0.013
+erro_modelo2 %>% round(3)
+## [1] 0
+```
+
+Mas e gerarmos mais dados de acordo com o nosso modelo inicial? Qual modelo terá melhor
+performance? 
+
+
+```r
+dados2 <- data_frame(
+  x = runif(100),
+  y = 2*x + rnorm(100, 0, 0.1)
+)
+ggplot(dados2, aes(x = x, y = y)) + geom_point() +
+  geom_smooth(data = dados, formula = y ~ x, colour = "red", se = FALSE, method = 'lm') +
+  geom_smooth(data = dados, formula = y ~ poly(x, 9), se = FALSE, method = 'lm')
+```
+
+<img src="figures//unnamed-chunk-34-1.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" width="50%" height="50%" />
+
+```r
+erro_modelo1 <- mean((dados2$y - predict(modelo, newdata = dados2))^2)
+erro_modelo2 <- mean((dados2$y - predict(modelo2, newdata = dados2))^2)
+erro_modelo1 %>% round(3)
+## [1] 0.015
+erro_modelo2 %>% round(3)
+## [1] 6.772
+```
+
+O modelo que acertava todas as observações na base que usamos para treinar, passou
+a errar mais quando testado em novos dados.
+
+Isso é o que chamamos de *overfitting*. O modelo azul ajustou ruidos aleatórios que
+eram inerentes à forma com que os dados foram gerados e dessa forma, não foi capaz
+de prever bem em dados que tinham ruidos aleatorios diferentes.
+
+Claro, esse exemplo é ilustrativo. Desde o começo sabíamos a forma com que os dados
+eram gerados. Isso raramente acontece. Na prática, estamos tentando criar um modelo 
+para explicar como os dados são gerados, por isso temos que tomar bastante cuidado 
+para não assumir relações desta forma e criar modelos que explicam apenas aquela amostra.
+
+
+
+<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
+
+
+
+
+<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
+
+
+
+1. Calcule o número de ouro no R.
+
+$$
+\frac{1 + \sqrt{5}}{2}
+$$
+
+<div data-datacamp-exercise data-height="300" data-encoded="true">eyJsYW5ndWFnZSI6InIiLCJzYW1wbGUiOiIjIERpZ2l0ZSBhIGV4cHJlc3NcdTAwZTNvIHF1ZSBjYWxjdWxhIG8gblx1MDBmYW1lcm8gZGUgb3Vyby4iLCJzb2x1dGlvbiI6IigxICsgc3FydCg1KSkvMiIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiMS42MTgwMzRcIiwgaW5jb3JyZWN0X21zZyA9IFwiVGVtIGNlcnRlemEgZGUgcXVlIGluZGljb3UgYSBleHByZXNzXHUwMGUzbyBjb3JyZXRhbWVudGU/XCIpXG5zdWNjZXNzX21zZyhcIkNvcnJldG8hXCIpIn0=</div>
+
 
 
 
