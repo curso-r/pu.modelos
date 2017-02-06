@@ -1,11 +1,6 @@
 ---
 title: "05-overfitting"
-output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Overfitting
 
@@ -105,11 +100,4 @@ Claro, esse exemplo é ilustrativo. Desde o começo sabíamos a forma com que os
 eram gerados. Isso raramente acontece. Na prática, estamos tentando criar um modelo 
 para explicar como os dados são gerados, por isso temos que tomar bastante cuidado 
 para não assumir relações desta forma e criar modelos que explicam apenas aquela amostra.
-
-
-
-
-
-
-
 
