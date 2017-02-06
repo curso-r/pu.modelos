@@ -1,6 +1,6 @@
 ---
 title: Modelagem
-date: '2017-02-03'
+date: '2017-02-06'
 ---
 
 
@@ -154,7 +154,7 @@ bodyfat <- read_excel('data/BodyFat.xls')
 ggplot(bodyfat, aes(x = WEIGHT, y = BODYFAT)) + geom_point()
 ```
 
-<img src="figures//unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="50%" height="50%" />
 
 A partir do gráfico de dispersão, vemos que o peso do indivíduo parece ser **linearmente**
 relacionado ao percentual de gordura corporal. Vamos então ajustar um modelo linear
@@ -234,7 +234,7 @@ str(ajuste, max.level = 1)
 ##   .. ..- attr(*, "order")= int 1
 ##   .. ..- attr(*, "intercept")= int 1
 ##   .. ..- attr(*, "response")= int 1
-##   .. ..- attr(*, ".Environment")=<environment: 0x33bbf40> 
+##   .. ..- attr(*, ".Environment")=<environment: 0x19fc660> 
 ##   .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -247,7 +247,7 @@ str(ajuste, max.level = 1)
 ##   .. .. ..- attr(*, "order")= int 1
 ##   .. .. ..- attr(*, "intercept")= int 1
 ##   .. .. ..- attr(*, "response")= int 1
-##   .. .. ..- attr(*, ".Environment")=<environment: 0x33bbf40> 
+##   .. .. ..- attr(*, ".Environment")=<environment: 0x19fc660> 
 ##   .. .. ..- attr(*, "predvars")= language list(BODYFAT, WEIGHT)
 ##   .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 ##   .. .. .. ..- attr(*, "names")= chr [1:2] "BODYFAT" "WEIGHT"
@@ -356,7 +356,7 @@ quando o objetivo é classificar uma observação em uma de duas classes. Consid
 que o seu objetivo é separar as observações azuis das observações laranjas no 
 gráfico abaixo.
 
-<img src="figures//unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="50%" height="50%" />
 
 Pelo gráfico acima, podemos ver que a variável $x$ fornece informação que ajuda
 a discriminar se a observação será azul ou laranja. Basta ver que as observações
@@ -434,9 +434,9 @@ summary(arvore)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.44444444      0 1.0000000 1.0000000 0.04244576
 ## 2 0.02339181      1 0.5555556 0.5555556 0.03574957
-## 3 0.01461988      2 0.5321637 0.5964912 0.03667148
-## 4 0.01169591      4 0.5029240 0.5847953 0.03641573
-## 5 0.01000000      6 0.4795322 0.5555556 0.03574957
+## 3 0.01461988      2 0.5321637 0.5994152 0.03673449
+## 4 0.01169591      4 0.5029240 0.5935673 0.03660811
+## 5 0.01000000      6 0.4795322 0.5584795 0.03581795
 ## 
 ## Variable importance
 ##    Sex Pclass    Age 
@@ -541,7 +541,7 @@ library(rpart.plot)
 rpart.plot(arvore)
 ```
 
-<img src="figures//unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="70%" height="70%" />
+<img src="figures//unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="70%" height="70%" />
 
 A visualização é bem intuitiva. No topo, vemos o primeiro nó em que 38% dos indivíduos
 sobreviveram e que representa o total da base (100%). Em seguida, vemos que a primeira
@@ -610,7 +610,7 @@ ggplot(valores, aes(x = FPR, y = TPR)) +
   geom_abline(color = 'blue', linetype = 'dashed')
 ```
 
-<img src="figures//unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="50%" height="50%" />
 
 A função de custo pode ser calculada da seguinte forma. Veja que estamos considerando
 pesos iguais para ambos os erros.
@@ -623,29 +623,10 @@ valores %>%
   geom_line()
 ```
 
-<img src="figures//unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="50%" height="50%" />
+<img src="figures//unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="50%" height="50%" />
 
 Neste caso, o ponto mínimo da função é obtido com qualquer corte entre um pouco menos de 25%
 até um pouco mais de 50%. Isso nem sempre é verdade e deve ser avaliado em cada modelo.
-
-
-<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
-
-
-
-
-<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
-
-
-
-1. Calcule o número de ouro no R.
-
-$$
-\frac{1 + \sqrt{5}}{2}
-$$
-
-<div data-datacamp-exercise data-height="300" data-encoded="true">eyJsYW5ndWFnZSI6InIiLCJzYW1wbGUiOiIjIERpZ2l0ZSBhIGV4cHJlc3NcdTAwZTNvIHF1ZSBjYWxjdWxhIG8gblx1MDBmYW1lcm8gZGUgb3Vyby4iLCJzb2x1dGlvbiI6IigxICsgc3FydCg1KSkvMiIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiMS42MTgwMzRcIiwgaW5jb3JyZWN0X21zZyA9IFwiVGVtIGNlcnRlemEgZGUgcXVlIGluZGljb3UgYSBleHByZXNzXHUwMGUzbyBjb3JyZXRhbWVudGU/XCIpXG5zdWNjZXNzX21zZyhcIkNvcnJldG8hXCIpIn0=</div>
-
 
 
 
